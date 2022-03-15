@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,10 +23,10 @@ import com.bancodigital.service.ClienteService;
 import com.bancodigital.utils.BancoDigitalException;
 import com.bancodigital.utils.ErrorHandler;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
-@Tag(name = "Cliente")
+@Api(tags = "Cliente")
 @RestController
 @RequestMapping("cliente")
 public class ClienteController {
@@ -36,7 +37,7 @@ public class ClienteController {
 	@Autowired
 	private ClienteRepository clienteRepository;
 	
-	@Operation(summary = "Cadastrar cliente", description = "Cadastrar um novo Cliente")
+	@ApiOperation(value = "Cadastrar cliente", notes = "Cadastrar uma nova Cliente")
 	@PostMapping(value = "novo", produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> cadastrarCliente(@RequestBody ClienteCadastroDTO requisicao) throws BancoDigitalException{
 		try {
@@ -47,7 +48,7 @@ public class ClienteController {
 		}
 	}
 	
-	@Operation(summary = "Login", description = "Realizar login no sistema para possibilitar acoes em Contas")
+	@ApiOperation(value = "Login", notes = "Logar no sistema")
 	@PostMapping(value = "login", produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> cadastrarCliente(@RequestBody LoginDTO requisicao) throws BancoDigitalException{
 		
@@ -59,7 +60,7 @@ public class ClienteController {
 		}
 	}
 	
-	@Operation(summary = "Buscar clientes", description = "Buscar todos os Clientes cadastrados no banco de dados")
+	@ApiOperation(value = "Buscar Clientes", notes = "Buscar todos os clientes cadastrados no sistema")
 	@GetMapping(value = "", produces = "application/json;charset=utf-8")
 	public ResponseEntity<?> buscarTodosOsClientes(){
 		try {			
@@ -69,6 +70,17 @@ public class ClienteController {
 				retorno.add(c.getNomeCliente());
 			}
 			return ResponseEntity.ok(retorno);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorHandler(e.getMessage()));
+		}
+	}
+	
+	@ApiOperation(value = "Detalhes cliente", notes = "Busca todos os detalhes do cliente logado")
+	@GetMapping(value = "logado", produces = "application/json;charset=utf-8")
+	public ResponseEntity<?> buscarCliente(@RequestHeader(value="Authorization") String token){
+		try {			
+			ClienteModel cliente = clienteService.validacao(token);
+			return ResponseEntity.ok(cliente);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorHandler(e.getMessage()));
 		}

@@ -17,3 +17,17 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL94Dialect
         format-sql: true
+        
+swagger:
+   path_api_scan: com.bancodigital
+   info:
+      title: Banco Digital API
+      description: API do Banco Digital
+      version: '@project.version@'
+      termsOfServiceUrl: Terms of Service
+      contact: 
+         name: Alvaro Joaquim de Faria Barros Junior
+         url: https://github.com/AlvaroBarrosJunior
+         email: alvarojoaquimjr@gmail.com
+      license: Apache License Version 2.0
+      licenseUrl: https://www.apache.org/licensen.html

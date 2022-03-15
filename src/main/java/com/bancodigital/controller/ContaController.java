@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,12 +27,13 @@ import com.bancodigital.service.ContaService;
 import com.bancodigital.utils.BancoDigitalException;
 import com.bancodigital.utils.ErrorHandler;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
-@Tag(name = "Conta")
+@Api(tags = "Conta")
 @RestController
 @RequestMapping("conta")
+@CrossOrigin("*")
 public class ContaController {
 	
 	@Autowired
@@ -43,7 +45,7 @@ public class ContaController {
 	@Autowired
 	private ContaRepository contaRepository;
 	
-	@Operation(summary = "Cadastrar conta", description = "Cadastrar uma nova Conta")
+	@ApiOperation(value = "Cadastrar conta", notes = "Cadastrar uma nova Conta")
 	@PostMapping(value = "novo", produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> cadastrarConta(@RequestBody ContaCadastroDTO requisicao, @RequestHeader("Authorization") String token) throws BancoDigitalException{
 		
@@ -55,7 +57,7 @@ public class ContaController {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token expirado ou usuário não autorizado, realize login novamente");
 	}
 	
-	@Operation(summary = "Buscar contas", description = "Buscar todas as Contas do Cliente logado")
+	@ApiOperation(value = "Buscar contas", notes = "Buscar todas as Contas do Cliente logado")
 	@GetMapping(value = "", produces = "application/json;charset=utf-8")
 	public ResponseEntity<?> buscarContasCliente(@RequestHeader("Authorization") String token) throws BancoDigitalException{
 		try {
@@ -72,7 +74,7 @@ public class ContaController {
 		}
 	}
 	
-	@Operation(summary = "Buscar conta", description = "Buscar uma Conta específica do Cliente logado")
+	@ApiOperation(value = "Buscar conta", notes = "Buscar uma Conta específica do Cliente logado")
 	@GetMapping(value = "{nuConta}", produces = "application/json;charset=utf-8")
 	public ResponseEntity<?> buscarContasCliente(@PathVariable Long nuConta,@RequestHeader("Authorization") String token) throws BancoDigitalException{
 		try {
@@ -92,7 +94,7 @@ public class ContaController {
 		}
 	}
 	
-	@Operation(summary = "Despositar em conta", description = "Realizar deposito em uma Conta do Cliente logado")
+	@ApiOperation(value = "Despositar em conta", notes = "Realizar deposito em uma Conta do Cliente logado")
 	@PutMapping(value = "deposito", produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> depositarValor(@RequestBody DepositoSaqueDTO requisicao, @RequestHeader("Authorization") String token){
 		try {			
@@ -117,7 +119,7 @@ public class ContaController {
 		}
 	}
 	
-	@Operation(summary = "Sacar de conta", description = "Realizar saque em uma Conta do Cliente logado")
+	@ApiOperation(value = "Sacar de conta", notes = "Realizar saque em uma Conta do Cliente logado")
 	@PutMapping(value = "saque", produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> sacarValor(@RequestBody DepositoSaqueDTO requisicao, @RequestHeader("Authorization") String token){
 		try {			
@@ -141,7 +143,7 @@ public class ContaController {
 		}
 	}
 	
-	@Operation(summary = "Trasferencias em contas", description = "Realizar transferencia de uma Conta do Cliente logado para qualquer Conta cadastrada no sistema")
+	@ApiOperation(value = "Trasferencias em contas", notes = "BRealizar transferencia de uma Conta do Cliente logado para qualquer Conta cadastrada no sistema")
 	@PutMapping(value = "transferencia", produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> transferirValor(@RequestBody TranferenciaDTO requisicao, @RequestHeader("Authorization") String token){
 		try {			

@@ -18,10 +18,10 @@ import com.bancodigital.repository.BancoRepository;
 import com.bancodigital.service.BancoService;
 import com.bancodigital.utils.BancoDigitalException;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
-@Tag(name = "Banco")
+@Api(tags = "Banco")
 @RestController
 @RequestMapping("banco")
 public class BancoController {
@@ -32,14 +32,14 @@ public class BancoController {
 	@Autowired
 	private BancoService bancoService;
 	
-	@Operation(summary = "Buscar todos os bancos", description = "Buscar todos os Bancos cadastrados no banco de dados")
+	@ApiOperation(value = "Buscar bancos", notes = "Buscar todos os bancos cadastrados no sistema")
 	@GetMapping(value = "", produces = "application/json;charset=utf-8")
 	public ResponseEntity<List<BancoModel>> buscarTodosOsBancos(){
 		List<BancoModel> lista = bancoRepository.findAll();
 		return ResponseEntity.ok(lista);
 	}
 	
-	@Operation(summary = "Cadastrar banco", description = "Cadastrar um novo Banco")
+	@ApiOperation(value = "Cadastrar Banoc", notes = "Cadastrar um novo banco")
 	@PostMapping(value = "novo", produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<BancoModel> cadastrarBanco(@RequestBody BancoCadastroDTO requisicao) throws BancoDigitalException{
 		
