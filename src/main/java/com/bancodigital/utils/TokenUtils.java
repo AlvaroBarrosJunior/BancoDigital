@@ -11,7 +11,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class TokenUtils {
 	
 	private static final long expirationTime = 1800000;
-	private static final String key = "segredoSecretoDosAdoles";
+	private static final String key = "${token.key}";
 	
 	public static String generateToken(ClienteModel cliente) {
 		return Jwts.builder()

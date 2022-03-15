@@ -31,3 +31,6 @@ swagger:
          email: alvarojoaquimjr@gmail.com
       license: Apache License Version 2.0
       licenseUrl: https://www.apache.org/licensen.html
+      
+token:
+  key: ${TOKEN_KEY}
