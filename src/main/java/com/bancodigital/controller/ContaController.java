@@ -45,7 +45,7 @@ public class ContaController {
 	@Autowired
 	private ContaRepository contaRepository;
 	
-	@ApiOperation(value = "Cadastrar conta", notes = "Cadastrar uma nova Conta")
+	@ApiOperation(value = "Cadastrar conta", notes = "Cadastrar uma nova Conta (tipos de conta: Conta Corrente - 1, Conta Poupanca - 2)")
 	@PostMapping(value = "novo", produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> cadastrarConta(@RequestBody ContaCadastroDTO requisicao, @RequestHeader("Authorization") String token) throws BancoDigitalException{
 		
