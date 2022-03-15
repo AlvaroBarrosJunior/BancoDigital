@@ -1,5 +1,6 @@
 package com.bancodigital.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,10 @@ import com.bancodigital.service.ClienteService;
 import com.bancodigital.utils.BancoDigitalException;
 import com.bancodigital.utils.ErrorHandler;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Cliente")
 @RestController
 @RequestMapping("cliente")
 public class ClienteController {
@@ -31,6 +36,7 @@ public class ClienteController {
 	@Autowired
 	private ClienteRepository clienteRepository;
 	
+	@Operation(summary = "Cadastrar cliente", description = "Cadastrar um novo Cliente")
 	@PostMapping(value = "novo", produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> cadastrarCliente(@RequestBody ClienteCadastroDTO requisicao) throws BancoDigitalException{
 		try {
@@ -41,6 +47,7 @@ public class ClienteController {
 		}
 	}
 	
+	@Operation(summary = "Login", description = "Realizar login no sistema para possibilitar acoes em Contas")
 	@PostMapping(value = "login", produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> cadastrarCliente(@RequestBody LoginDTO requisicao) throws BancoDigitalException{
 		
@@ -52,11 +59,16 @@ public class ClienteController {
 		}
 	}
 	
+	@Operation(summary = "Buscar clientes", description = "Buscar todos os Clientes cadastrados no banco de dados")
 	@GetMapping(value = "", produces = "application/json;charset=utf-8")
 	public ResponseEntity<?> buscarTodosOsClientes(){
 		try {			
 			List<ClienteModel> lista = clienteRepository.findAll();
-			return ResponseEntity.ok(lista);
+			List<String> retorno = new ArrayList<String>();
+			for (ClienteModel c : lista) {
+				retorno.add(c.getNomeCliente());
+			}
+			return ResponseEntity.ok(retorno);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorHandler(e.getMessage()));
 		}
